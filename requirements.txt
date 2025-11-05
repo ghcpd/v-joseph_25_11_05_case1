@@ -1,1 +1,8 @@
-datasync_pro
+# DataSync Pro v2.0 - Python Dependencies
+# Requires Python 3.7+
+
+# Core dependency
+datasync_pro>=2.0
+
+# Note: asyncio is included in Python standard library (Python 3.7+)
+# No additional third-party dependencies required for basic usage
