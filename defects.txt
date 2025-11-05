@@ -1,0 +1,34 @@
+--- TEST LOG ---
+run_tests.sh: line 5: python: command not found
+\n--- JSON RESULTS ---
+{
+  "example_runs": [
+    [
+      "fetch_remote_sync",
+      "returned_coroutine",
+      null
+    ],
+    [
+      "modern_flow",
+      "success",
+      {
+        "remote_data": [
+          "user_2",
+          "user_3"
+        ],
+        "report": {
+          "synced_count": 3,
+          "timestamp": "2025-11-05T06:14:23.123355",
+          "validated": true
+        },
+        "status": {
+          "ok": true,
+          "missing": [],
+          "checked": "2025-11-05T06:14:23.174495"
+        },
+        "export_file": "report.json"
+      }
+    ]
+  ],
+  "errors": []
+}
