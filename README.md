@@ -14,26 +14,10 @@ pip install datasync_pro
 
 ## Usage
 
-```python
-from datasync_pro.core import DataSyncPro
+The project examples have been updated for v2.0 usage. See `corrected_readme.md` for fully working async examples.
 
-cache = ["user_1", "user_2"]
-remote = ["user_2", "user_3"]
-
-sync = DataSyncPro(cache, remote, retries=5)
-
-# v1.x API (no longer valid)
-remote_data = sync.fetch_remote()
-sync.sync_all()
-status = sync.verify_integrity()
-
-if status:
-    print("All records verified!")
-else:
-    print("Some records are missing!")
-
-sync.export_json("report.json")
-print("Done!")
+```text
+Note: In v2.0, several methods are asynchronous (fetch_remote, sync_all, verify_integrity). The README example below is retained for historical reference but is not valid for v2.0.
 ```
 
 ---

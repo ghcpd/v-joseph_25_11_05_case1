@@ -1,0 +1,41 @@
+DataSync Pro v2.0 - Defects and Outdated Usages
+
+1) README.md uses synchronous API for async methods
+- Observed location: README.md "Usage" example
+- Expected behavior: fetch_remote(), sync_all(), verify_integrity() are async in v2.0
+- Impact: Code in README that calls these methods synchronously will error with coroutine warnings or not execute
+- Fix: Use asyncio.run() to execute coroutines, or make DataSyncPro methods synchronous wrappers.
+
+2) verify_integrity() return signature changed
+- Observed: README expects a boolean status (True/False) but v2.0 returns a dict {"ok": bool, "missing": [...], "checked": timestamp}
+- Impact: Conditional checks like `if status:` no longer convey explicit verification; must use status['ok']
+- Fix: Update README logic to check status['ok'] and present missing items if any.
+
+3) README references `fetch_remote()` return value use
+- Observed: README assigns `remote_data = sync.fetch_remote()` then calls sync_all() expecting internal side-effects; however, fetch_remote is async and returns the remote list. Using it sync will fail
+- Fix: Await fetch_remote if needed or remove unnecessary assignment if using sync_all
+
+4) export_json() precondition
+- Observed: export_json() raises ValueError if no last_report exists. README does not explicitly state that sync_all() must be run first
+- Impact: Users might call export_json() before sync_all() and see errors
+- Fix: Update docs to state that `sync_all()` must be run prior to `export_json()`.
+
+5) Packaging & install instructions
+- Observed: README suggests `pip install datasync_pro`, but repository does not appear to be packaged on PyPI. The `requirements.txt` contains `datasync_pro` without version pin; this may fail for local development
+- Fix: Update `requirements.txt` to include runtime and test dependencies only (e.g., pytest), and add setup.sh to create a venv and install local package using `pip install -e .` if a package or suggest `pip install -r requirements.txt`.
+
+6) test_script.py intentionally fails by running README.md with runpy
+- Observed: `test_script.py` uses runpy.run_path("README.md") which is not executable python code
+- Fix: Replace with script that runs the example code properly and collects logs
+
+7) Missing asynchronous test harness
+- Observed: No test harness to run async methods properly, e.g., using asyncio.run or pytest-asyncio
+- Fix: Add a test script or pytest test capable of running coroutines.
+
+Summary:
+- README.md must be updated to use `asyncio.run()` for all coroutine calls
+- Verify integrity logic should be updated to inspect `status['ok']`
+- `test_script.py` should be replaced to run working examples and verify file exports
+- `requirements.txt` should be updated to include `pytest` and optional `pytest-asyncio` or include instructions in `setup.sh`
+
+Logs & reproduction steps are included in the accompanying `test_script.py` and `run_tests.sh`.

@@ -1,1 +1,7 @@
-datasync_pro
+# Development and test dependencies for DataSync Pro v2.0
+pytest>=7.0
+pytest-asyncio>=0.21
+
+# For local development: install editable copy
+# python -m venv venv; source venv/bin/activate; pip install -e .
+
