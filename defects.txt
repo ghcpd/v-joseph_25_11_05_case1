@@ -1,0 +1,29 @@
+DataSync Pro v2.0 - Defects / Outdated Documentation Log
+
+1) README.md: uses v1.x synchronous API
+   - README's example imports `DataSyncPro` and then calls `fetch_remote()`, `sync_all()` and `verify_integrity()` synchronously. These are now async functions in v2.0.
+   - README indicates `verify_integrity()` returns a boolean (True/False) but in v2.0 it returns a dict with `ok`, `missing`, `checked` fields.
+   - README shows `sync_all()` as returning nothing — in v2.0 it returns a `last_report` dict (and sets `last_report` attribute). README didn't handle the return value.
+   - README suggests pip installing `datasync_pro` as a published package. This repository contains a local package; the README should instruct installing dependencies or adding the package folder to PYTHONPATH.
+
+2) API changes / behavior changes
+   - DataSyncPro.__init__ now has keyword argument `validate_schema=True`. README does not mention this optional flag.
+   - `fetch_remote` is asynchronous and validates `remote_source` type; README does not mention raised `ConnectionError` if it's not a list.
+   - `verify_integrity` returns a dict and is async; README used it like a boolean synchronous call.
+   - `export_json` will raise a ValueError if `last_report` is None; README calls it after running `sync_all()` but doesn't explain the dependency.
+
+3) Examples fail when run as documented
+   - Running README's example code as-is results in TypeError (awaitable not awaited) or RuntimeError when using event loop incorrectly.
+   - Because `verify_integrity` returns a dict, `if status:` will always evaluate truthy (dicts are truthy even if ok==False). README used it to check boolean status — code will print "All records verified!" even when missing records.
+   - `sync_all` does not print to console; README expected outputs which were outdated.
+
+4) Minor issues and suggestions
+   - The README and example should show proper asyncio usage (either use asyncio.run or run through an asyncio event loop) and demonstrate the returned report from sync_all and verify_integrity.
+   - Documentation should mention exceptions (ConnectionError from fetch_remote, ValueError from export_json) so users can handle them.
+   - Add examples of using `validate_schema` flag and of handling non-list remote sources.
+   - Add unit tests to verify behavior of the package.
+
+Action required
+- Update README with async-friendly examples, show the correct return types, and update the expected output.
+- Provide a test harness and a setup script to create a reproducible environment with pytest.
+- Add defensive test cases for known errors and exceptions.
