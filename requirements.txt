@@ -1,1 +1,4 @@
-datasync_pro
+pytest>=7.0
+# Use this file to install test dependencies.
+# If you want to use this local package instead of a PyPI package,
+# add the current folder to PYTHONPATH or install in editable mode if you have packaging set up.
