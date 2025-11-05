@@ -1,0 +1,24 @@
+Defects Log - DataSync Pro v2.0
+
+1) Outdated synchronous usage in README.md
+   - README shows calling async methods sync.fetch_remote(), sync.sync_all(), and sync.verify_integrity() directly.
+   - In v2.0 those methods are async and must be awaited via asyncio.run or called from an async function.
+
+2) verify_integrity() return type changed
+   - README expects a boolean return. In v2.0 it returns a dict with fields: {"ok": bool, "missing": list, "checked": timestamp}
+   - Code using it as a boolean will behave incorrectly.
+
+3) README example uses sync.export_json() after calling sync_all() synchronously
+   - If user uses await sync.sync_all(), last_report is set. If they do not await properly, export_json raises ValueError.
+
+4) test_script.py is incorrect
+   - It attempts to run the README.md with runpy.run_path which fails because README.md is not a python file.
+
+5) setup.sh and run_tests.sh are unix-only
+   - Scripts assume bash and posix virtualenv paths (.venv/bin/activate). On Windows PowerShell these paths are .venv\Scripts\Activate.ps1.
+
+6) requirements.txt references datasync_pro which is the package under test, not an external dependency. Keep only dev/test packages if needed.
+
+7) Minor: README mentions pip install datasync_pro; in local development, package is not published; instructions should show installing from local path.
+
+End of defects log.

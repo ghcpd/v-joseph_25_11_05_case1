@@ -1,1 +1,1 @@
-datasync_pro
+pytest>=6.0
